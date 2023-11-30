@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Products{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1 class="centered">{{ product.title }}</h1>
+    <br/><br/>
+    <p>{{ product.depID.name }}</p>
+    <p>{{ product.description }}</p>
+    <p>${{ product.price}}</p>
+    <a href="{% url 'add_to_cart' pk=product.pk %}" class="btn btn-primary">Add To Cart</a>
+    <a href="{% url 'cart' %}" class="btn btn-primary">Cart</a>
+  </div>
+{% endblock %}
