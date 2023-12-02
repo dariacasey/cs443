@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %} ... {% endblock %}
+
+{% block content %}
+
+</br>
+<center>
+    {% if searched %}
+        <h1> Products related to ... "{{searched}}"</h1>
+        <br/>
+        {% for product in products %}
+        <div class="card">
+        
+            <div class="card-body text-left">
+            <a href="{% url 'product_detail' product.pk %}"><strong>{{ product.name }}</strong> </a> - <strong>${{ product.price }}</strong> 
+            
+            <br/>
+            <small>Product ID: {{ product.productID }} </small>
+            <br/>
+            {% if product.description|length > 150 %}
+                {{ product.description|slice:":150"}}...
+            {% else %}
+                {{ product.description }}
+            {% endif %}
+            </div>
+        </div>
+        <br/>
+        {% endfor %}
+    {% else %}
+        <h1> No Search Detected</h1>
+    {% endif %}
+   
+</center>
+
+
+{% endblock %}

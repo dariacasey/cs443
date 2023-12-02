@@ -6,6 +6,7 @@ from .models import Product, Customer, Order, Department, Cart, CartItem
 from django.views.generic import DetailView, ListView
 from .forms import LoginForm, CheckoutForm
 from django.utils.timezone import now
+from django.db.models import Q
 
 '''Cassie To Do: 
     - Populate database. you can add pictures if you feel like it but idc 
@@ -59,6 +60,21 @@ def logout_user(request):
         messages.info(request, "You are already logged out.")
     return redirect('products')
 
+#Searches (queries) the products listed
+def search_results_view(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        products = Product.objects.filter(
+            Q(productID__icontains=searched) |
+            Q(depID__name__icontains=searched) |  # Use the appropriate field for Department name
+            Q(name__icontains=searched) |
+            Q(description__icontains=searched) |
+            Q(price__icontains=searched)
+        )
+        return render(request, 'search_results.html', {'searched':searched, 'products':products})
+        
+    else:
+        return render(request, 'search_results.html', {})
 
 # Lists all the products on the "home" page
 class AllProducts(ListView):

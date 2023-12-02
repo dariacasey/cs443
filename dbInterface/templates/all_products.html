@@ -7,10 +7,12 @@
   <div class="row">
     {% for product in object_list %}
     <div class="col-sm-4">
-      <div class="post-card">
-        <h3>{{ product.name }}</h3>
-        <p class="text-lower">{{ product.department }}</p>
-        <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">View</a>
+      <div class="card">
+        <div class="card-body text-left">
+          <h3>{{ product.name }}</h3>
+          <p class="text-lower">{{ product.department }}</p>
+          <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">View</a>
+        </div>
       </div>
     </div>
     {% endfor %}
