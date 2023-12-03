@@ -26,7 +26,7 @@ def signup_view(request):
             user = form.save()
             customer = Customer.objects.create(user=user, fname='', lname='')
             login(request, user)
-            return redirect('login')
+            return redirect('login_user')
     else:
         form = UserCreationForm()
     return render(request, 'registration/sign_up.html', {'form': form})
