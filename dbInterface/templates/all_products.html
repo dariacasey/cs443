@@ -80,8 +80,13 @@
                   <div class="col-sm-3 mb-3"">
                     <div class="card">
                       <div class="card-body text-left">
-                        <h4>{{ product.name }}</h4>
-                        <p class="text-lower">${{ product.price }}</p> 
+                        <h4>{{ product.name }}</h4><p class="text-lower">${{ product.price }}</p> 
+                        {% if product.description|length > 50 %}
+                            {{ product.description|slice:":50"}}...
+                        {% else %}
+                            {{product.description }}
+                        {% endif %}
+                        </br>
                         <a href="{% url 'product_detail' product.pk %}" class="btn btn-sm btn-light float-right">View</a>
                       </div>
                     </div>
