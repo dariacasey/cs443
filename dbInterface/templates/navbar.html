@@ -18,15 +18,23 @@
          <a class="nav-link" href="{% url 'products' %}">Products</a>
        </li>
 
-       <form class="d-flex" method=POST action="{% url 'search_results' %}">
-          {% csrf_token %}
-          <input class="form-control me-2" type="search" placeholder="Query Products" aria-label="Search" name="searched">
-          <button class="btn btn-primary" type="submit">Search</button>
-        </form>
+       <li class="nav-item">
+         <a class="nav-link" href="{% url 'orders' %}">Orders</a>
+       </li>
+
+
 
        <li class="nav-item">
          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
        </li>
+      
+      
+      </br>
+      <form class="d-flex" method=POST action="{% url 'search_results' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Query Products" aria-label="Search" name="searched">
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+      </form>
 
      {% else %}
        <li class="nav-item">

@@ -1,0 +1,29 @@
+<!-- cart.html -->
+{% extends 'base.html' %}
+{% block title %}Shopping Cart{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <div class="container">
+    <h1 class="centered"> Your Order History</h1>
+      <br/>
+
+    {% if not orders %}
+      <p>Your cart is empty. Add items to your cart!</p>
+    {% else %}
+        {% for order in orders %}
+          <div class="card">
+            <div class="card-body text-left">
+                <strong>Order ID: </strong>{{ order.orderID }}<br/>
+                <strong>Product ID: </strong>{{ order.productID }}<br/>
+                <strong>Quantity: </strong>{{ order.quantity }}<br/>
+                <strong>Billing Address: </strong>{{ order.billing_add }}<br/>
+                <strong>Shipping Address: </strong>{{ order.shipping_add }}<br/>
+                <strong>Payment Method:</strong> Card Ending in <strong>{{ "****"|slice:":-4" }}{{ order.card|stringformat:"04d"|slice:"-4:" }}</strong> </br>
+                <small>Ordered On {{ order.date }}</small><br/>
+            </div>
+          </div>
+          </br>
+        {% endfor %}   
+    {% endif %}
+  </div>
+{% endblock %}

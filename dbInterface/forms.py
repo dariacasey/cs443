@@ -12,3 +12,4 @@ class LoginForm(forms.Form):
 class CheckoutForm(forms.Form):
     billing_address = forms.CharField(label='Billing Address', max_length=255)
     shipping_address = forms.CharField(label='Shipping Address', max_length=255)
+    card = forms.IntegerField(label="Card Number")

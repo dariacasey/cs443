@@ -2,8 +2,31 @@
 {% block title %}Checkout{% endblock %}
 {% block content %}
   <div class="container">
-    <h1 class="centered">Checkout</h1>
-
+    <h1 class="centered">Checking Out</h1>
+    <div class="card">
+      <div class="card-body text-left">
+          <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in cart_items %}
+                    <tr>
+                        <td><strong>{{ cart_item.product.name }}</strong></td>
+                        <td>${{ cart_item.product.price }}</td>
+                        <td>{{ cart_item.quantity }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        Total Cost: ${{ total_cost }}
+      </div>
+    </div>
+  </br>
     <form method="post" action="{% url 'checkout' %}">
       {% csrf_token %}
       {{ form.as_p }}

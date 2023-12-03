@@ -81,6 +81,25 @@ class AllProducts(ListView):
     model = Product
     template_name = "all_products.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Fetch all departments
+        context['departments'] = Department.objects.all()
+
+        # Get the selected department from the request's GET parameters
+        selected_department_id = self.request.GET.get('department')
+
+        # Fetch products based on the selected department
+        if selected_department_id:
+            selected_department = get_object_or_404(Department, depID=selected_department_id)
+            context['object_list'] = Product.objects.filter(depID=selected_department)
+            context['selected_department'] = selected_department
+        else:
+            context['selected_department'] = None
+
+        return context
+
 
 # Shows individual product. Description, price, and has option to add to cart
 class ProductDetail(DetailView):
@@ -192,6 +211,13 @@ def checkout(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
 
+    # Get customer's Cart and CartItems
+    customer_cart = Cart.objects.get(customerID=customer)
+    cart_items = CartItem.objects.filter(cart=customer_cart)
+
+    # Calculate the total cost of the items in the cart
+    total_cost = sum(item.product.price * item.quantity for item in cart_items)
+
     # Use form so the customer can input billing, shipping, and payment**
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
@@ -199,11 +225,7 @@ def checkout(request):
             # Get user input for billing and shipping. ADD PAYMENT HERE AFTER ADDED TO THE MODEL
             billing_address = form.cleaned_data['billing_address']
             shipping_address = form.cleaned_data['shipping_address']
-
-            # Get customer's Cart and CartItems
-            customer_cart = Cart.objects.get(customerID=customer)
-            cart_items = CartItem.objects.filter(cart=customer_cart)
-
+            card = form.cleaned_data['card']
             # Each CartItem is ordered individually
             for cart_item in cart_items:
                 Order.objects.create(
@@ -212,6 +234,7 @@ def checkout(request):
                     quantity=cart_item.quantity,
                     billing_add=billing_address,
                     shipping_add=shipping_address,
+                    card=card,
                     date=now()
                 )
 
@@ -228,6 +251,20 @@ def checkout(request):
 
     context = {
         'form': form,
+        'cart_items': cart_items,
+        'total_cost': total_cost,
     }
 
     return render(request, 'checkout.html', context)
+
+def orders(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+    orders = Order.objects.filter(customerID=customer)
+
+    context = {
+        'orders': orders,
+    }
+
+    return render(request, 'orders.html', context)
+    
